@@ -1,0 +1,52 @@
+<ui:composition xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets">
+    <nav class="navbar" style="background:#9fd7f1;">
+        <div class="container">
+            <h:link styleClass="navbar-brand text-white fw-bold"
+                    outcome="index.xhtml"
+                    value="ReservaUJA"/>
+
+            <div class="ms-auto d-flex gap-2 align-items-center">
+
+                <h:link styleClass="btn ruja-btn"
+                        outcome="results.xhtml"
+                        value="Resultados"/>
+
+                <h:link styleClass="btn ruja-btn"
+                        outcome="vue-alojamientos.xhtml"
+                        value="Vue alojamientos"/>
+
+                <h:link styleClass="btn ruja-btn"
+                        outcome="myreservations"
+                        value="Mis reservas"/>
+
+                <h:panelGroup rendered="#{sessionScope.rol eq 'ADMIN'}">
+                    <h:link styleClass="btn ruja-btn"
+                            outcome="admin-alojamientos.xhtml"
+                            value="Admin alojamientos"/>
+
+                    <h:link styleClass="btn ruja-btn"
+                            outcome="admin-servicios.xhtml"
+                            value="Admin servicios"/>
+
+                    <h:link styleClass="btn ruja-btn"
+                            outcome="admin-dashboard.xhtml"
+                            value="Dashboard"/>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{not empty sessionScope.usuarioEmail}">
+                    <span class="text-white fw-semibold me-2">
+                        #{sessionScope.usuarioEmail}
+                    </span>
+
+                    <h:form styleClass="d-inline">
+                        <h:commandButton value="Cerrar sesión"
+                                         action="#{authVM.logout}"
+                                         styleClass="btn btn-outline-secondary btn-sm" />
+                    </h:form>
+                </h:panelGroup>
+
+            </div>
+        </div>
+    </nav>
+</ui:composition>

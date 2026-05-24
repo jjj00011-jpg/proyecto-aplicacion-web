@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <ui:define name="title">ReservaUJA · Mis reservas</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4">
+            <div class="card shadow-sm">
+                <div class="card-header fw-bold">Mis reservas</div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">Consulta tus reservas y revisa el estado de cada estancia.</p>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                            <tr>
+                                <th>Alojamiento</th>
+                                <th>Fechas</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Hotel Centro Jaén</td>
+                                <td>10/03 → 12/03</td>
+                                <td><span class="badge text-bg-success">Confirmada</span></td>
+                                <td class="text-end">
+                                    <h:link styleClass="btn btn-outline-secondary btn-sm" outcome="details" value="Ver detalle"/>
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            data-bs-toggle="modal" data-bs-target="#cancelModal">
+                                        Cancelar
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Apartamento Catedral</td>
+                                <td>22/04 → 23/04</td>
+                                <td><span class="badge text-bg-secondary">Pendiente</span></td>
+                                <td class="text-end">
+                                    <h:link styleClass="btn btn-outline-secondary btn-sm" outcome="details" value="Ver detalle"/>
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            data-bs-toggle="modal" data-bs-target="#cancelModal">
+                                        Cancelar
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <h:link styleClass="btn btn-outline-secondary" outcome="index" value="← Inicio"/>
+                        <h:link styleClass="btn ruja-btn" outcome="results" value="Buscar alojamientos"/>
+                    </div>
+                </div>
+            </div>
+
+            <!--(Bootstrap) -->
+            <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cancelar reserva</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-1"><b>Política:</b> Moderada (ejemplo).</p>
+                            <p class="mb-0"><b>Reembolso estimado:</b> 50% (placeholder).</p>
+                            <p class="text-muted mt-2 mb-0">La cancelación se gestiona según la política asociada a la reserva.</p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Volver</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal">Confirmar cancelación</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </ui:define>
+
+</ui:composition>

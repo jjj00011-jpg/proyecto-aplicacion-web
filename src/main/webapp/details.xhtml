@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{detailsVM.id}" />
+        <f:viewAction action="#{detailsVM.load}" onPostback="false" />
+    </f:metadata>
+
+    <ui:define name="title">ReservaUJA · Detalles</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4">
+            <h1 class="h3 mb-3">Detalles de alojamiento</h1>
+
+            <h:panelGroup rendered="#{empty detailsVM.alojamiento}">
+                <div class="alert alert-warning">
+                    No se ha encontrado el alojamiento solicitado.
+                </div>
+                <h:link styleClass="btn btn-outline-secondary" outcome="results.xhtml" value="← Volver a resultados"/>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{not empty detailsVM.alojamiento}">
+                <div class="card shadow-sm overflow-hidden">
+
+                    <img src="#{empty detailsVM.alojamiento.fotoUrl ? request.contextPath.concat('/assets/img/alojamiento-default.jpg') : detailsVM.alojamiento.fotoUrl}"
+                         class="ruja-detail-img"
+                         alt="Foto de #{detailsVM.alojamiento.nombre}"/>
+
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-2">
+                            <div>
+                                <h2 class="h4 mb-1">#{detailsVM.alojamiento.nombre}</h2>
+                                <p class="text-muted mb-0">
+                                    #{detailsVM.alojamiento.tipo} · #{detailsVM.alojamiento.valoracionMedia} ★ · #{detailsVM.alojamiento.precioNoche}€/noche
+                                </p>
+                            </div>
+
+                            <span class="badge text-bg-secondary fs-6">
+                                Capacidad: #{detailsVM.alojamiento.capacidad} huéspedes
+                            </span>
+                        </div>
+
+                        <h3 class="h5 mt-4">Ubicación</h3>
+                        <p class="mb-2">
+                            #{detailsVM.alojamiento.direccion}, #{detailsVM.alojamiento.ciudad}
+                        </p>
+
+                        <div id="detailMap"
+                             class="ruja-detail-map mb-3"
+                             data-lat="#{detailsVM.alojamiento.latitud}"
+                             data-lng="#{detailsVM.alojamiento.longitud}">
+                        </div>
+
+                        <h3 class="h5 mt-3">Descripción</h3>
+                        <p class="mb-3">
+                            #{detailsVM.alojamiento.descripcion}
+                        </p>
+
+                        <h3 class="h5 mt-3">Servicios</h3>
+                        <h:panelGroup rendered="#{empty detailsVM.servicios}">
+                            <p class="text-muted">Este alojamiento no tiene servicios asociados.</p>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered="#{not empty detailsVM.servicios}">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <ui:repeat value="#{detailsVM.servicios}" var="s">
+                                    <span class="badge text-bg-secondary">#{s.nombre}</span>
+                                </ui:repeat>
+                            </div>
+                        </h:panelGroup>
+
+                        <h3 class="h5 mt-3">Información adicional</h3>
+                        <ul class="mb-0">
+                            <li>Precio por noche: #{detailsVM.alojamiento.precioNoche}€</li>
+                            <li>Valoración media: #{detailsVM.alojamiento.valoracionMedia}/5</li>
+                            <li>Capacidad máxima: #{detailsVM.alojamiento.capacidad} huéspedes</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-footer bg-white">
+                        <div class="d-flex flex-wrap gap-2">
+                            <h:link styleClass="btn ruja-btn" outcome="booking.xhtml" value="Reservar">
+                                <f:param name="id" value="#{detailsVM.alojamiento.idAlojamiento}" />
+                            </h:link>
+
+                            <h:link styleClass="btn btn-outline-secondary" outcome="review.xhtml" value="Dejar reseña">
+                                <f:param name="id" value="#{detailsVM.alojamiento.idAlojamiento}" />
+                            </h:link>
+
+                            <h:link styleClass="btn btn-outline-secondary ms-auto" outcome="results.xhtml" value="← Volver a resultados"/>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </main>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <script src="#{request.contextPath}/assets/js/utils.js"></script>
+        <script src="#{request.contextPath}/assets/js/details.js"></script>
+    </ui:define>
+
+</ui:composition>

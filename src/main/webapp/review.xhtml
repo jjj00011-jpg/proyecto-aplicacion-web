@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <ui:define name="title">ReservaUJA · Reseña</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4" style="max-width: 860px;">
+            <div class="card shadow-sm overflow-hidden">
+
+                <img id="reviewAlojamientoImg"
+                     src="#{request.contextPath}/assets/img/alojamiento-default.jpg"
+                     class="ruja-review-img"
+                     alt="Imagen del alojamiento"/>
+
+                <div class="card-header fw-bold">Dejar reseña</div>
+
+                <div class="card-body">
+                    <p class="text-muted">
+                        Valora tu experiencia en el alojamiento seleccionado. El formulario se valida dinámicamente antes de preparar la reseña.
+                    </p>
+
+                    <div id="reviewError" class="alert alert-warning d-none"></div>
+
+                    <form id="reviewForm" novalidate="novalidate">
+
+                        <div class="mb-3">
+                            <label class="form-label" for="rAlojamiento">Alojamiento</label>
+                            <input id="rAlojamiento"
+                                   class="form-control"
+                                   type="text"
+                                   readonly="readonly"
+                                   required="required"/>
+                            <div id="reviewAlojamientoInfo" class="form-text">
+                                Cargando alojamiento seleccionado...
+                            </div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="rNombre">Tu nombre opcional</label>
+                            <input id="rNombre"
+                                   class="form-control"
+                                   type="text"
+                                   placeholder="Ej. Ana Pérez"/>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="rPuntuacion">Puntuación</label>
+                            <select id="rPuntuacion" class="form-select" required="required">
+                                <option value="">Selecciona…</option>
+                                <option value="5">5 - Excelente</option>
+                                <option value="4">4 - Muy bien</option>
+                                <option value="3">3 - Bien</option>
+                                <option value="2">2 - Regular</option>
+                                <option value="1">1 - Malo</option>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="rComentario">Comentario</label>
+                            <textarea id="rComentario"
+                                      class="form-control"
+                                      rows="4"
+                                      maxlength="500"
+                                      required="required"
+                                      placeholder="Cuenta tu experiencia..."></textarea>
+                            <div class="invalid-feedback"></div>
+                            <div id="comentarioContador" class="form-text">0/500 caracteres</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn ruja-btn w-100" type="submit">Enviar reseña</button>
+                            <button class="btn btn-outline-secondary w-100" type="button" id="clearReviewBtn">Borrar</button>
+                        </div>
+
+                    </form>
+
+                    <div id="reviewSummary" class="alert alert-success mt-3 d-none">
+                        <b>Resumen de la reseña:</b><br/>
+                        Alojamiento: <span id="sReviewAlojamiento"></span><br/>
+                        Nombre: <span id="sReviewNombre"></span><br/>
+                        Puntuación: <span id="sReviewPuntuacion"></span><br/>
+                        Comentario:<br/>
+                        <span id="sReviewComentario"></span>
+                    </div>
+
+                    <div class="mt-2">
+                        <h:link styleClass="btn btn-outline-secondary w-100" outcome="results" value="Volver a resultados"/>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <script src="#{request.contextPath}/assets/js/utils.js"></script>
+        <script src="#{request.contextPath}/assets/js/review.js"></script>
+    </ui:define>
+
+</ui:composition>

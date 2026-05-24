@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{adminGuardVM.checkAdmin}" onPostback="false"/>
+        <f:viewParam name="id" value="#{alojamientoFormVM.id}" />
+        <f:viewAction action="#{alojamientoFormVM.load}" onPostback="false" />
+    </f:metadata>
+
+    <ui:define name="title">Admin · Alojamiento</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4" style="max-width: 760px;">
+            <h1 class="h3 mb-3">Alojamiento (Admin)</h1>
+
+            <h:messages styleClass="alert alert-danger" layout="list"
+                        rendered="#{facesContext.maximumSeverity != null}" />
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h:form>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <h:inputText id="nombre" value="#{alojamientoFormVM.model.nombre}"
+                                         styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="El nombre es obligatorio."/>
+                            <h:message for="nombre" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ciudad</label>
+                            <h:inputText id="ciudad" value="#{alojamientoFormVM.model.ciudad}"
+                                         styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="La ciudad es obligatoria."/>
+                            <h:message for="ciudad" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Dirección</label>
+                            <h:inputText id="direccion" value="#{alojamientoFormVM.model.direccion}"
+                                         styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="La dirección es obligatoria."/>
+                            <h:message for="direccion" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tipo</label>
+                            <h:selectOneMenu id="tipo" value="#{alojamientoFormVM.model.tipo}"
+                                             styleClass="form-select"
+                                             required="true"
+                                             requiredMessage="Selecciona un tipo.">
+                                <f:selectItem itemLabel="Selecciona…" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{alojamientoFormVM.tipos}" var="t"
+                                               itemValue="#{t}" itemLabel="#{t}" />
+                            </h:selectOneMenu>
+                            <h:message for="tipo" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Precio por noche (€)</label>
+                            <h:inputText id="precio" value="#{alojamientoFormVM.model.precioNoche}"
+                                         styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="El precio es obligatorio."/>
+                            <div class="form-text">Mínimo 1€.</div>
+                            <h:message for="precio" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Capacidad (huéspedes)</label>
+                            <h:inputText id="capacidad" value="#{alojamientoFormVM.model.capacidad}"
+                                         styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="La capacidad es obligatoria."/>
+                            <div class="form-text">Entre 1 y 50.</div>
+                            <h:message for="capacidad" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Valoración media (1-5)</label>
+                            <h:inputText id="valoracion" value="#{alojamientoFormVM.model.valoracionMedia}"
+                                         styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="La valoración es obligatoria."/>
+                            <div class="form-text">Entre 1 y 5.</div>
+                            <h:message for="valoracion" styleClass="text-danger small" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <h:inputTextarea id="descripcion" value="#{alojamientoFormVM.model.descripcion}"
+                                             styleClass="form-control" rows="3"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Servicios</label>
+
+                            <h:panelGroup rendered="#{empty alojamientoFormVM.serviciosDisponibles}">
+                                <p class="text-muted mb-0">No hay servicios disponibles.</p>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{not empty alojamientoFormVM.serviciosDisponibles}">
+                                <h:selectManyCheckbox value="#{alojamientoFormVM.serviciosSeleccionados}"
+                                                      layout="pageDirection">
+                                    <f:selectItems value="#{alojamientoFormVM.serviciosDisponibles}"
+                                                   var="s"
+                                                   itemValue="#{s.idServicio}"
+                                                   itemLabel="#{s.nombre}" />
+                                </h:selectManyCheckbox>
+                            </h:panelGroup>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <h:commandButton value="Guardar"
+                                             action="#{alojamientoFormVM.guardar}"
+                                             styleClass="btn ruja-btn w-100"/>
+                            <h:link value="Cancelar" outcome="admin-alojamientos"
+                                    styleClass="btn btn-outline-secondary w-100"/>
+                        </div>
+
+                    </h:form>
+
+                </div>
+            </div>
+        </main>
+
+    </ui:define>
+</ui:composition>

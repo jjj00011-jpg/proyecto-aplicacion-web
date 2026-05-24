@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <ui:define name="title">ReservaUJA · Reserva</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4">
+            <div class="row g-4">
+
+                <section class="col-12 col-lg-7">
+                    <div class="card shadow-sm">
+                        <div class="card-header fw-bold">Datos para la reserva</div>
+                        <div class="card-body">
+
+                            <div id="bookingError" class="alert alert-warning d-none"></div>
+
+                            <form id="bookingForm" novalidate="novalidate">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label" for="bNombre">Nombre y apellidos</label>
+                                        <input id="bNombre"
+                                               class="form-control"
+                                               type="text"
+                                               required="required"
+                                               placeholder="Ej. Ana Pérez"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label" for="bEmail">Email</label>
+                                        <input id="bEmail"
+                                               class="form-control"
+                                               type="email"
+                                               required="required"
+                                               placeholder="ana@email.com"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label" for="bTelefono">Teléfono</label>
+                                        <input id="bTelefono"
+                                               class="form-control"
+                                               type="tel"
+                                               required="required"
+                                               placeholder="+34 600 000 000"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label class="form-label" for="bEntrada">Entrada</label>
+                                        <input id="bEntrada"
+                                               class="form-control"
+                                               type="date"
+                                               required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label class="form-label" for="bSalida">Salida</label>
+                                        <input id="bSalida"
+                                               class="form-control"
+                                               type="date"
+                                               required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label" for="bHuespedes">Huéspedes</label>
+                                        <input id="bHuespedes"
+                                               class="form-control"
+                                               type="number"
+                                               min="1"
+                                               max="10"
+                                               value="2"
+                                               required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label" for="bPago">Método de pago</label>
+                                        <select id="bPago" class="form-select" required="required">
+                                            <option value="">Selecciona…</option>
+                                            <option value="Tarjeta">Tarjeta</option>
+                                            <option value="PayPal">PayPal</option>
+                                            <option value="Transferencia">Transferencia</option>
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label" for="bCupon">Cupón opcional</label>
+                                        <input id="bCupon"
+                                               class="form-control"
+                                               type="text"
+                                               placeholder="UJA10"/>
+                                        <div class="form-text">El cupón UJA10 aplica un 10% de descuento.</div>
+                                    </div>
+
+                                    <div class="col-12 d-flex gap-2">
+                                        <button class="btn ruja-btn w-100" type="submit">Confirmar reserva</button>
+                                        <button class="btn btn-outline-secondary w-100" type="button" id="clearBookingBtn">Borrar</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div id="bookingSummary" class="alert alert-success mt-3 d-none">
+                                <b>Resumen de la reserva:</b><br/>
+                                Alojamiento: <span id="sAlojamientoReserva"></span><br/>
+                                Nombre: <span id="sNombre"></span><br/>
+                                Email: <span id="sEmail"></span><br/>
+                                Teléfono: <span id="sTelefono"></span><br/>
+                                Entrada: <span id="sEntrada"></span> · Salida: <span id="sSalida"></span><br/>
+                                Huéspedes: <span id="sHuespedes"></span><br/>
+                                Pago: <span id="sPago"></span><br/>
+                                Cupón: <span id="sCupon"></span><br/>
+                                Noches: <span id="sNoches"></span><br/>
+                                Total: <span id="sTotal"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="col-12 col-lg-5">
+                    <div class="card shadow-sm overflow-hidden">
+                        <img id="resumenImagen"
+                             src="#{request.contextPath}/assets/img/alojamiento-default.jpg"
+                             class="ruja-booking-img"
+                             alt="Imagen del alojamiento"/>
+
+                        <div class="card-header fw-bold">Resumen dinámico</div>
+
+                        <div class="card-body">
+                            <p class="mb-1"><b>Alojamiento</b>: <span id="resumenAlojamiento">Cargando...</span></p>
+                            <p class="text-muted mb-3">
+                                <span id="resumenCiudad">Jaén</span> · El precio se actualiza automáticamente al cambiar fechas o cupón.
+                            </p>
+
+                            <div class="d-flex justify-content-between">
+                                <span>Precio/noche</span>
+                                <span id="resumenPrecioNoche">72€</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between text-muted">
+                                <span>Noches</span>
+                                <span id="resumenNoches">0</span>
+                            </div>
+
+                            <hr/>
+
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total</span>
+                                <span id="resumenTotal">0€</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </main>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <script src="#{request.contextPath}/assets/js/utils.js"></script>
+        <script src="#{request.contextPath}/assets/js/booking.js"></script>
+    </ui:define>
+
+</ui:composition>

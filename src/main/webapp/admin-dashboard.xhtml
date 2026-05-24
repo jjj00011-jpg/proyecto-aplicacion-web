@@ -1,0 +1,209 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{adminGuardVM.checkAdmin}" onPostback="false"/>
+    </f:metadata>
+
+    <ui:define name="title">Admin · Dashboard</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+                <div>
+                    <h1 class="h3 mb-1">Dashboard analítico</h1>
+                    <p class="text-muted mb-0">
+                        Indicadores visuales generados con Chart.js a partir de los datos persistentes de ReservaUJA.
+                    </p>
+                </div>
+
+                <div>
+                    <h:link styleClass="btn btn-outline-secondary"
+                            outcome="admin-alojamientos.xhtml"
+                            value="← Volver a administración"/>
+                </div>
+            </div>
+
+            <section class="row g-3 mb-4">
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card shadow-sm h-100 ruja-dashboard-kpi">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Alojamientos</p>
+                            <h2 class="h3 mb-0">#{dashboardVM.totalAlojamientos}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card shadow-sm h-100 ruja-dashboard-kpi">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Servicios</p>
+                            <h2 class="h3 mb-0">#{dashboardVM.totalServicios}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card shadow-sm h-100 ruja-dashboard-kpi">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Precio medio</p>
+                            <h2 class="h3 mb-0">#{dashboardVM.precioMedioGeneralFormateado}€</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <div class="card shadow-sm h-100 ruja-dashboard-kpi">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">Valoración media</p>
+                            <h2 class="h3 mb-0">#{dashboardVM.valoracionMediaGeneralFormateada}/5</h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="row g-4">
+
+                <div class="col-12 col-xl-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                <div>
+                                    <h2 class="h5 mb-1">Alojamientos por tipo</h2>
+                                    <p class="text-muted small mb-0">
+                                        Comparativa entre hoteles y apartamentos.
+                                    </p>
+                                </div>
+
+                                <button id="descargarGraficoTipos"
+                                        type="button"
+                                        class="btn btn-outline-secondary btn-sm">
+                                    Descargar
+                                </button>
+                            </div>
+
+                            <canvas id="graficoTipos"
+                                    height="150"
+                                    data-hoteles="#{dashboardVM.totalHoteles}"
+                                    data-apartamentos="#{dashboardVM.totalApartamentos}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 mb-1">Precio medio por tipo</h2>
+                            <p class="text-muted small mb-3">
+                                Precio medio por noche según el tipo de alojamiento.
+                            </p>
+
+                            <canvas id="graficoPrecios"
+                                    height="150"
+                                    data-precio-hoteles="#{dashboardVM.precioMedioHotelesFormateado}"
+                                    data-precio-apartamentos="#{dashboardVM.precioMedioApartamentosFormateado}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 mb-1">Servicios más usados</h2>
+                            <p class="text-muted small mb-3">
+                                Número de alojamientos asociados a cada servicio.
+                            </p>
+
+                            <canvas id="graficoServicios"
+                                    height="150"
+                                    data-labels="#{dashboardVM.etiquetasServiciosChart}"
+                                    data-values="#{dashboardVM.datosServiciosChart}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 mb-1">Alojamientos por ciudad</h2>
+                            <p class="text-muted small mb-3">
+                                Distribución del catálogo por municipio.
+                            </p>
+
+                            <canvas id="graficoCiudades"
+                                    height="150"
+                                    data-labels="#{dashboardVM.etiquetasCiudadesChart}"
+                                    data-values="#{dashboardVM.datosCiudadesChart}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="h5 mb-1">Valoración media por alojamiento</h2>
+                            <p class="text-muted small mb-3">
+                                Comparativa de valoraciones de los alojamientos disponibles.
+                            </p>
+
+                            <canvas id="graficoValoraciones"
+                                    height="95"
+                                    data-labels="#{dashboardVM.etiquetasValoracionesChart}"
+                                    data-values="#{dashboardVM.datosValoracionesChart}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 mb-1">Capacidad media por tipo</h2>
+                            <p class="text-muted small mb-3">
+                                Promedio de huéspedes por tipo de alojamiento.
+                            </p>
+
+                            <canvas id="graficoCapacidad"
+                                    height="150"
+                                    data-capacidad-hoteles="#{dashboardVM.capacidadMediaHotelesFormateada}"
+                                    data-capacidad-apartamentos="#{dashboardVM.capacidadMediaApartamentosFormateada}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 mb-1">Precio por alojamiento</h2>
+                            <p class="text-muted small mb-3">
+                                Evolución visual de precios por noche ordenados de menor a mayor.
+                            </p>
+
+                            <canvas id="graficoLineaPrecios"
+                                    height="150"
+                                    data-labels="#{dashboardVM.etiquetasPreciosAlojamientoChart}"
+                                    data-values="#{dashboardVM.datosPreciosAlojamientoChart}">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="#{request.contextPath}/assets/js/admin-dashboard.js"></script>
+    </ui:define>
+
+</ui:composition>

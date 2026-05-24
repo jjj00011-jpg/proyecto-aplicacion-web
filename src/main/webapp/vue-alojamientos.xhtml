@@ -1,0 +1,17 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/WEB-INF/template/plantilla.xhtml">
+
+    <ui:define name="title">ReservaUJA · Vue alojamientos</ui:define>
+
+    <ui:define name="content">
+        <main class="container my-4">
+            <div id="vueApp"></div>
+        </main>
+    </ui:define>
+
+    <ui:define name="scripts">
+        <script type="module" src="#{request.contextPath}/assets/js/vue-alojamientos.js"></script>
+    </ui:define>
+
+</ui:composition>
